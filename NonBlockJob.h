@@ -18,6 +18,13 @@
 // if the thread isn't finish after the timeout pass (probably due to sys-call blocking)
 // it would be signaled, and than join.
 
+// TIPS : If you wan't to use this class from different threads on the same time it's OK, under the following :
+// 1) don't invoke the same IO or SYSCALL function from different jobs. If one of those jobs will be killed,
+// the second one could not start at all, or get stuck. it's undefined behavior (could be mutual exclusion).
+// 2) please avoid using secronized tools (mutexes, etc.) as much as possible inside the jobs.
+// if a job will be killed, it could not release those resources (actually there is still a possibility that those
+// resources would be released. As long as the sig_handler does nothing, the jobs continue just from when it was blocked).
+
 class  NonBlockJob {
 	using SIGNAL = int;
 
